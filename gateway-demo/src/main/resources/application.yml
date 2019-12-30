@@ -1,0 +1,21 @@
+server:
+  port: 8070
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: consumer
+          uri: lb://consumer
+          predicates:
+            - Path=/consumer/**
+          filters:
+            - RewritePath=/consumer/(?<segment>.*),/$\{segment}
+        - id: provider
+          uri: lb://provider
+          predicates:
+            - Path=/provider/**
+          filters:
+            - RewritePath=/provider/(?<segment>.*),/$\{segment}
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
